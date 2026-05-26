@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --card-bg: #FFFFFF;
+  --card-border: #E2E8F0;
+  
+  /* Primary brand colors */
+  --koinx-blue: #2563EB;
+  --koinx-blue-hover: #1D4ED8;
+  --koinx-blue-light: #EFF6FF;
+  
+  /* Pre-harvesting card dark background in light theme */
+  --pre-card-bg: #111827;
+  --pre-card-text: #F9FAFB;
+  --pre-card-border: #374151;
 }
 
-@theme inline {
+.dark {
+  --background: #0B0E14;
+  --foreground: #F1F5F9;
+  --card-bg: #111622;
+  --card-border: #1E2638;
+  
+  --koinx-blue: #3B82F6;
+  --koinx-blue-hover: #2563EB;
+  --koinx-blue-light: #1E293B;
+  
+  /* Pre-harvesting card dark background in dark theme */
+  --pre-card-bg: #151B2B;
+  --pre-card-text: #F9FAFB;
+  --pre-card-border: #232C3F;
+}
+
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-card: var(--card-bg);
+  --color-card-border: var(--card-border);
+  
+  --color-koinx-blue: var(--koinx-blue);
+  --color-koinx-blue-hover: var(--koinx-blue-hover);
+  --color-koinx-blue-light: var(--koinx-blue-light);
+  
+  --color-pre-card: var(--pre-card-bg);
+  --color-pre-card-text: var(--pre-card-text);
+  --color-pre-card-border: var(--pre-card-border);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphism custom styles */
+.glass-panel {
+  background-backdrop: blur(12px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}
+
+.dark .glass-panel {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Premium micro-interactions and transitions */
+.smooth-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Sparkle shine animation for the savings badge */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+.glow-savings {
+  animation: pulse-glow 2s infinite ease-in-out;
 }

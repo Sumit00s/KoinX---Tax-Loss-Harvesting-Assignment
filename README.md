@@ -1,83 +1,100 @@
-# KoinX - Crypto Tax Loss Harvesting Dashboard
+# KoinX - Crypto Tax Loss Harvesting Dashboard 🚀
 
-A highly responsive, premium, and fully functional **Tax Loss Harvesting Dashboard** built using **Next.js (App Router)** and **Tailwind CSS v4**. This tool mirrors the KoinX Figma design, provides real-time offset math, features interactive dark/light modes, and runs fully on a robust server-client architecture.
+A highly responsive, premium, and fully functional **Tax Loss Harvesting Dashboard** built using **Next.js 16 (App Router)** and **Tailwind CSS v4**. This tool perfectly mirrors the KoinX Figma specifications, handles complex capital gains offset rules in real-time, features seamless Dark/Light theme toggling, and compiles completely warning-free.
 
----
-
-## 🚀 Live Demo & Key Highlights
-
-- **Dynamic Tax Offset Math**: Simulates real-time set-off calculations matching standard capital gain guidelines when selecting/deselecting holdings.
-- **Double Theme Integration**: Premium toggling system for light and dark modes, utilizing CSS-variable styling with glassmorphism and subtle animations.
-- **Mobile First & Responsive**: Seamlessly stacks dashboard cards and scales table fields on smaller devices.
-- **Search & Advanced Sort**: Search assets instantly by name or code. Initial sort places assets with harvestable losses at the top of the table.
-- **"View All" Footer Folding**: Gracefully folds the table to show a compact view by default and expands smoothly.
-- **"How It Works?" Overlay Guide**: Includes an interactive modal explaining tax-loss harvesting rules, set-off methodologies, and tax rates.
-- **Warning-Free Compilation**: Completely warning-free, highly optimized production build output.
+### 🌐 Live Production URL: [https://koinx-harversting.vercel.app](https://koinx-harversting.vercel.app)
 
 ---
 
-## 🛠️ Tech Stack & Key Files
+## ⚡ Key Highlights & Premium Features
 
-- **Core**: Next.js v16 (App Router), React v19, Tailwind CSS v4.
-- **API Mocking**: Native Next.js API Route Handlers.
-- **Styling**: Vanilla Tailwind CSS v4 with dynamic CSS variables.
-- **Key Folders**:
-  - `app/api/capital-gains/route.js`: Mock API route serving initial capital gains.
-  - `app/api/holdings/route.js`: Mock API route serving holdings.
-  - `app/components/ThemeContext.js`: Dark/light mode coordinator.
-  - `app/components/Disclaimers.js`: Collapsible accordions with SVGs.
-  - `app/components/GainsCard.js`: Reusable glassmorphic gains breakdowns cards.
-  - `app/components/HoldingsTable.js`: Holdings manager with search, sort, and select.
-  - `app/components/TaxHarvestingDashboard.js`: Main state controller.
-  - `app/page.js`: Server Component page that fetches initial mock data.
+- **Dynamic Tax Offset Math**: Simulates real-time set-off calculations matching standard capital gain guidelines when selecting/deselecting assets.
+- **Advanced Dual-Theme Integration**: Premium toggling system for Light and Dark modes. Features customized CSS variable overrides, sleek glassmorphism panels, and elegant transitions.
+- **recruiter-focused Testing Guide**: Embedded within the README and an interactive `"How it works?"` modal in the UI.
+- **Smart Scientific Balance Truncation**: Elegant parsing of floating-point fractions to prevent ugly raw exponential strings (e.g. displaying `< 0.0001 BTC` instead of `3.469446951953614e-17`).
+- **Initial Sort by Harvesting Priority**: The holdings list is sorted initially by highest losses first to immediately put the most valuable tax-offsetting options at the very top of the table.
+- **"View All" Footer folding**: Table limits visible items to 6 by default and folds out smoothly with a custom CSS transition to keep the main viewport uncluttered.
+- **Fail-Safe Image CDNs**: External coingecko asset icons are wrapped in a safe `<img>` load handler that automatically swaps in a custom `DefaultCoin.svg` in case of external network outages.
 
 ---
 
-## 📊 Core Business Logic & Assumptions
+## 📊 Tax Offset Math & Assumptions
 
-Under standard tax loss harvesting guidelines:
-1. **Short-Term Capital Gains (STCG)**: Assumed tax rate is **15%**. Short-Term Capital Losses (STCL) can offset both STCG and LTCG.
-2. **Long-Term Capital Gains (LTCG)**: Assumed tax rate is **10%**. Long-Term Capital Losses (LTCL) can only offset LTCG.
-3. **Selling Amounts**: On row selection, the "Amount to Sell" column is automatically populated with the total token holdings of that asset, indicating full liquidation.
-4. **Calculations**:
+To calculate realistic, valuable tax savings, this dashboard implements standard capital gains rules:
+1. **Short-Term Capital Gains (STCG)**: Taxed at a standard rate of **15%**. Short-Term Capital Losses (STCL) can set off both short-term and long-term gains.
+2. **Long-Term Capital Gains (LTCG)**: Taxed at a standard rate of **10%**. Long-Term Capital Losses (LTCL) can *only* offset long-term gains.
+3. **Liquidation**: Upon row selection, the "Amount to Sell" column is populated automatically with the total holdings of that asset, indicating full liquidation to harvest maximum losses.
+4. **Savings Formulas**:
    - `Net Gain = Profits - Losses`
    - `Realised Capital Gains = STCG Net + LTCG Net`
    - `Pre-Harvesting Tax = (max(0, Net STCG) * 15%) + (max(0, Net LTCG) * 10%)`
    - `Post-Harvesting Tax = (max(0, Post Net STCG) * 15%) + (max(0, Post Net LTCG) * 10%)`
    - `Tax Savings = max(0, Pre-Harvesting Tax - Post-Harvesting Tax)`
-   *Celebration messages are triggered only if Pre-Harvesting Tax > Post-Harvesting Tax.*
+   *A pulsing celebratory party-popper badge (`🥳 You are going to save up to $X in taxes!`) triggers automatically if Pre-Harvesting Tax > Post-Harvesting Tax.*
+
+---
+
+## 🎨 Walkthrough: How to Test the Live Dashboard
+
+Recruiters and evaluators can verify the robust engineering of the dashboard by running these simple visual tests on the [Live Site](https://koinx-harversting.vercel.app):
+
+1. **Light / Dark Mode Swapping**: Click the **Sun/Moon toggle** in the top-right of the header. Watch the page transition seamlessly between a clean, high-contrast Slate light theme and a gorgeous deep midnight-blue `#0B0E14` dark theme.
+2. **Loss Harvesting Verification**:
+   - **SOL**: Select `SOL` (which has a simulated loss of `-$1,200` STCG and `-$3,000` LTCG). Watch the **After Harvesting card (Blue)** update its profits/losses, the Effective Gains drop, and a gold **glowing celebration badge** slide in declaring a tax savings of **`$480.00`** (`1,200 * 15% + 3,000 * 10%`)!
+   - **MATIC**: Select `MATIC` (which has a simulated loss of `-$800` STCG). Watch the card update to show exact tax savings of **`$120.00`** (`800 * 15%`)!
+   - **EZ**: Select `EZ` (which has a very tiny loss of `-$0.003`). Because the savings are less than half a cent, it mathematically rounds to **`$0`**, showing a correct savings of `$0.00`.
+   - **ETH**: Select `ETH` (which has a positive profit of `+$89.41`). Because it is a profit, it increases your tax liability rather than saving you money, so no celebration savings badge is shown—exactly as per tax guidelines!
+3. **Asset Search**: Type `BTC` or `USDT` into the search bar. The list will filter in real-time.
+4. **"View All" Accordion**: Scroll to the bottom of the table and click `View All (24)` to expand all rows, and `View Less` to collapse back to the compact dashboard view.
+5. **Interactive Modal**: Click **"How it works?"** next to the main title to trigger a beautiful overlay modal outlining the mathematical set-off regulations.
+6. **Mobile View**: Inspect the page and scale down to 375px (mobile). The capital gains cards stack vertically, table balances scale down, and the table slides horizontally so nothing overlaps.
+
+---
+
+## 🛠️ Project Structure
+
+```
+├── app
+│   ├── api
+│   │   ├── capital-gains
+│   │   │   └── route.js        # Mock Capital Gains API Route Handler
+│   │   └── holdings
+│   │       └── route.js        # Mock Holdings API Route Handler
+│   ├── components
+│   │   ├── ThemeContext.js     # Client Context for Dark/Light Mode
+│   │   ├── Disclaimers.js      # Collapsible Accordion Info Banner
+│   │   ├── GainsCard.js        # Reusable Capital Gains visual cards
+│   │   ├── HoldingsTable.js    # Filterable, sortable asset listing
+│   │   └── TaxHarvestingDashboard.js # Core State Coordinator
+│   ├── globals.css             # Tailwind CSS v4 variables & custom animations
+│   ├── layout.js               # SEO headers, viewport configurations & HTML shell
+│   └── page.js                 # Next.js Server Component entry point
+├── data
+│   ├── capital-gains-api.json  # Raw capital gains initial payload
+│   └── holdings-api.json       # Raw holdings portfolio payload
+├── README.md                   # Recruiter-facing Documentation
+```
 
 ---
 
 ## 💻 Local Setup & Development
 
-### 1. Prerequisites
-Ensure you have **Node.js v18+** installed.
-
-### 2. Clone and Install Dependencies
-Navigate to the root directory and install dependencies:
+### 1. Installation
+Ensure you have **Node.js v18+** installed. Clone the repository, navigate to the project directory, and install the dependencies:
 ```bash
 npm install
 ```
 
-### 3. Run Development Server
-Start the local Next.js development server:
+### 2. Launch Local Development
+Start the local development server:
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-### 4. Build and Export for Production
-Validate that the code compiles perfectly:
+### 3. Production Build Validation
+Verify that the Next.js production build bundles and optimizes successfully:
 ```bash
 npm run build
 ```
-
----
-
-## 🎨 UI Architecture Details
-
-- **Light Theme**: Renders a sleek slate-50 background, white cards with borders, high-contrast text, and a vibrant blue-indigo After Harvesting card.
-- **Dark Theme**: Renders a luxurious deep dark-gray background (`#0B0E14`), dark blue cards (`#111622`), white text headers, and glassmorphic tables.
-- **Safe Logo Loading**: Direct `<img>` integration with a standard `DefaultCoin.svg` error handler fallback to prevent broken coingecko image links.
-- **Clean Balances**: Truncates floating-point decimal noise and represents scientific notations beautifully (e.g. `< 0.0001 BTC` instead of `3.469e-17`).
+The build process compiles TypeScript definitions, minifies assets, and structures dynamic route pre-rendering warning-free.
